@@ -439,19 +439,16 @@
   </div>
   <textarea class="notes-box" id="notes" placeholder="Allergies, special instructions, etc. (optional)"></textarea>
 
-  <!-- STEP 4: ADDRESS -->
+  <!-- STEP 4: DELIVERY INFO -->
   <div class="step-header">
     <div class="step-num">4</div>
-    <div class="step-title">Delivery Address <span style="color:#B52020;font-size:0.9rem;">*required</span></div>
+    <div class="step-title">Delivery Info <span style="color:#B52020;font-size:0.9rem;">*required</span></div>
   </div>
-  <input class="notes-box" type="text" id="address" placeholder="Enter your full delivery address…" style="min-height:unset; padding:14px; display:block; width:100%;">
-
-  <!-- STEP 5: PHONE -->
-  <div class="step-header">
-    <div class="step-num">5</div>
-    <div class="step-title">Phone Number <span style="color:#B52020;font-size:0.9rem;">*required</span></div>
+  <div style="display:flex; flex-direction:column; gap:10px;">
+    <input class="notes-box" type="text" id="customer-name" placeholder="Full name…" style="min-height:unset; padding:14px; display:block; width:100%;">
+    <input class="notes-box" type="text" id="address" placeholder="Full delivery address…" style="min-height:unset; padding:14px; display:block; width:100%;">
+    <input class="notes-box" type="tel" id="phone" placeholder="Phone number…" style="min-height:unset; padding:14px; display:block; width:100%;">
   </div>
-  <input class="notes-box" type="tel" id="phone" placeholder="Enter your phone number…" style="min-height:unset; padding:14px; display:block; width:100%;">
 
   <!-- SUMMARY + ORDER BUTTON -->
   <div class="summary-box">
@@ -524,8 +521,14 @@
       alert('Please select both a pasta and a sauce before ordering!');
       return;
     }
+    const customerName = document.getElementById('customer-name').value.trim();
     const address = document.getElementById('address').value.trim();
     const phone = document.getElementById('phone').value.trim();
+    if (!customerName) {
+      alert('Please enter your name!');
+      document.getElementById('customer-name').focus();
+      return;
+    }
     if (!address) {
       alert('Please enter your delivery address!');
       document.getElementById('address').focus();
@@ -547,13 +550,14 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          name: customerName,
           pasta: selectedPasta,
           sauce: selectedSauce + ' ($' + selectedPrice + ')',
           address: address,
           phone: phone,
           special_requests: notes || 'None',
           total: '$' + selectedPrice,
-          _subject: "New Order from Marcello's Pasta"
+          _subject: "New Order from Marcello's Pasta - " + customerName
         })
       });
 
