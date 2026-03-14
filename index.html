@@ -351,6 +351,7 @@
     <h1>Marcello's Pasta</h1>
     <p class="hero-sub">NYC · Handmade Fresh Daily</p>
     <span class="hero-tag">🛵 Free Delivery on Orders Over $25</span>
+    <p style="color:#fff; margin-top:12px; font-size:1rem; letter-spacing:0.05em;">📞 <a href="tel:+19292644281" style="color:#F5C842; font-weight:700; text-decoration:none;">+1 (929) 264-4281</a></p>
   </div>
 </div>
 <div class="divider"></div>
@@ -436,7 +437,21 @@
     <div class="step-num">3</div>
     <div class="step-title">Special Requests</div>
   </div>
-  <textarea class="notes-box" id="notes" placeholder="Allergies, delivery address, or anything else…"></textarea>
+  <textarea class="notes-box" id="notes" placeholder="Allergies, special instructions, etc. (optional)"></textarea>
+
+  <!-- STEP 4: ADDRESS -->
+  <div class="step-header">
+    <div class="step-num">4</div>
+    <div class="step-title">Delivery Address <span style="color:#B52020;font-size:0.9rem;">*required</span></div>
+  </div>
+  <input class="notes-box" type="text" id="address" placeholder="Enter your full delivery address…" style="min-height:unset; padding:14px; display:block; width:100%;">
+
+  <!-- STEP 5: PHONE -->
+  <div class="step-header">
+    <div class="step-num">5</div>
+    <div class="step-title">Phone Number <span style="color:#B52020;font-size:0.9rem;">*required</span></div>
+  </div>
+  <input class="notes-box" type="tel" id="phone" placeholder="Enter your phone number…" style="min-height:unset; padding:14px; display:block; width:100%;">
 
   <!-- SUMMARY + ORDER BUTTON -->
   <div class="summary-box">
@@ -509,12 +524,26 @@
       alert('Please select both a pasta and a sauce before ordering!');
       return;
     }
+    const address = document.getElementById('address').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    if (!address) {
+      alert('Please enter your delivery address!');
+      document.getElementById('address').focus();
+      return;
+    }
+    if (!phone) {
+      alert('Please enter your phone number!');
+      document.getElementById('phone').focus();
+      return;
+    }
     const notes = document.getElementById('notes').value;
     const subject = encodeURIComponent("Order from Marcello's Pasta");
     const body = encodeURIComponent(
       "Hi Marcello!\n\nI'd like to place an order:\n\n" +
       "Pasta: " + selectedPasta + "\n" +
       "Sauce: " + selectedSauce + " ($" + selectedPrice + ")\n" +
+      "\nDelivery Address: " + address + "\n" +
+      "Phone: " + phone + "\n" +
       (notes ? "\nSpecial requests: " + notes + "\n" : '') +
       "\nTotal: $" + selectedPrice + "\n\nThank you!"
     );
