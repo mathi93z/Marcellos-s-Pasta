@@ -462,7 +462,7 @@
   </div>
 
   <a href="#" id="order-btn" class="email-btn" onclick="sendOrder(event)">
-    📧 Place Order via Email
+    📧 Place Order
   </a>
   <p class="prompt-msg" id="prompt-msg">Select your pasta & sauce to continue</p>
 
@@ -518,7 +518,7 @@
     sc.innerHTML = rows;
   }
 
-  function sendOrder(e) {
+  async function sendOrder(e) {
     e.preventDefault();
     if (!selectedPasta || !selectedSauce) {
       alert('Please select both a pasta and a sauce before ordering!');
@@ -537,17 +537,40 @@
       return;
     }
     const notes = document.getElementById('notes').value;
-    const subject = encodeURIComponent("Order from Marcello's Pasta");
-    const body = encodeURIComponent(
-      "Hi Marcello!\n\nI'd like to place an order:\n\n" +
-      "Pasta: " + selectedPasta + "\n" +
-      "Sauce: " + selectedSauce + " ($" + selectedPrice + ")\n" +
-      "\nDelivery Address: " + address + "\n" +
-      "Phone: " + phone + "\n" +
-      (notes ? "\nSpecial requests: " + notes + "\n" : '') +
-      "\nTotal: $" + selectedPrice + "\n\nThank you!"
-    );
-    window.location.href = "mailto:marcellospasta.nyc@gmail.com?subject=" + subject + "&body=" + body;
+    const btn = document.getElementById('order-btn');
+    btn.textContent = 'Sending...';
+    btn.style.opacity = '0.7';
+    btn.style.pointerEvents = 'none';
+
+    try {
+      const response = await fetch('https://formspree.io/f/mojknaeo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pasta: selectedPasta,
+          sauce: selectedSauce + ' ($' + selectedPrice + ')',
+          address: address,
+          phone: phone,
+          special_requests: notes || 'None',
+          total: '$' + selectedPrice,
+          _subject: "New Order from Marcello's Pasta"
+        })
+      });
+
+      if (response.ok) {
+        btn.textContent = '✅ Order Sent!';
+        btn.style.background = '#2D6A2D';
+        btn.style.color = '#fff';
+        document.getElementById('prompt-msg').textContent = "We'll be in touch shortly. Grazie! 🍝";
+      } else {
+        throw new Error('Failed');
+      }
+    } catch (err) {
+      btn.textContent = '📧 Place Order';
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = 'auto';
+      alert('Something went wrong. Please try again or call us at +1 (929) 264-4281');
+    }
   }
 </script>
 </body>
