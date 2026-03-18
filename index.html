@@ -350,7 +350,7 @@
   <div class="hero-inner">
     <h1>Marcello's Pasta</h1>
     <p class="hero-sub">NYC · Handmade Fresh Daily</p>
-    <span class="hero-tag">🛵 Free Delivery on Orders Over $25</span>
+    <span class="hero-tag">🛵 FREE DELIVERY</span>
     <p style="color:#fff; margin-top:12px; font-size:1rem; letter-spacing:0.05em;">📞 <a href="tel:+19292644281" style="color:#F5C842; font-weight:700; text-decoration:none;">+1 (929) 264-4281</a></p>
   </div>
 </div>
@@ -505,8 +505,7 @@
     if (selectedSauce) rows += `<div class="summary-row"><span>Sauce</span><span>${selectedSauce}</span></div>`;
     if (selectedPasta && selectedSauce) {
       rows += `<div class="summary-row summary-total"><span>Total</span><span>$${selectedPrice}</span></div>`;
-      const delivery = selectedPrice >= 25 ? '<div class="delivery-note">✅ Free delivery included!</div>' : `<div class="delivery-note">Add $${25 - selectedPrice} more for free delivery</div>`;
-      rows += delivery;
+      <div class="delivery-note">✅ Free delivery included!</div>
       msg.textContent = '';
     } else {
       msg.textContent = selectedPasta ? 'Now choose your sauce ↑' : 'Now choose your pasta ↑';
